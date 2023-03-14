@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const slugify = require('slugify')
+const slugify = require('slugify');
+const validator = require('validator');
 
 const tourSchema = new mongoose.Schema({
     name: {
@@ -8,7 +9,8 @@ const tourSchema = new mongoose.Schema({
         unique: true,
         trim: true,
         maxLength: [40, 'A tour must have less than or equal to 40 characters'],
-        minLength: [10, 'A tour must have more than or equal to 10 characters']
+        minLength: [10, 'A tour must have more than or equal to 10 characters'],
+        validate: [validator.isAlpha, 'Tour name must contain only characters']
     },
 
 
@@ -51,6 +53,7 @@ const tourSchema = new mongoose.Schema({
     priceDiscount: {
         type: Number,
         validate: {
+            // custom validator
             validator: function (val) {
                 //this only points to current doc on NEW DOCUMENT CREATION 
                 return val < this.price;
