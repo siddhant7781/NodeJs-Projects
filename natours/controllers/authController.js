@@ -85,4 +85,21 @@ exports.protect = catchAsync(async (req, res, next) => {
     //Grant acess to protected route
     req.user = currentUser;
     next()
-})
+});
+
+exports.restrictTo = (...roles) => {
+    return (req, res, next) => {
+        //roles is an array ['admin', 'lead-guide']
+        if (!roles.includes(req.user.role)) {
+            return next(new AppError('you do not have permission to perform this action'))
+        }
+        next();
+    }
+}
+
+exports.forgotPassword = (req, res, next) => {
+
+}
+exports.resetPassword = (req, res, next) => {
+
+}
