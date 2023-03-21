@@ -2,7 +2,15 @@ const User = require('./../models/userModel');
 const APIFeatures = require('./../utils/apiFeatures');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
+const mongoose = require('mongoose');
 
+
+const filterObj = (obj, ...allowedFields) => {
+    const newObj = {};
+    Object.keys(obj).forEach(el => {
+        if (allowedFields.includes(el)) newObj[el] = obj[el];
+    });
+}
 
 exports.getAllUsers = catchAsync(async (req, res, next) => {
     const users = await User.find()
@@ -23,14 +31,31 @@ exports.updateMe = catchAsync(async (req, res, next) => {
         return next(new AppError('This route is not for password update, please use /updatemypassword route', 400))
     }
 
-    // 2) update user docuument
-    const user = await User.findById(req.user.id);
-    user.name = ''
+    // 2) filtered unwanted field names that are not allowed to be updated
+    const filteredBody = filterObj(req.body, 'name', 'email');
 
-    res.ststus(200).json({
+    // 3) update user docuument
+    const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
+        new: true,
+        runValidators: true
+    });
+    res.status(200).json({
         status: 'success',
+        data: {
+            user: updatedUser
+        }
     });
 })
+
+exports.deleteMe = catchAsync(async (req, res, next) => {
+    await User.findByIdAndUpdate(req.user.id, { active: false })
+
+    res.status(204).json({
+        status: 'success',
+        data: null
+    });
+});
+
 exports.getUser = (req, res) => {
     res.status(500).json({
         status: 'error',
