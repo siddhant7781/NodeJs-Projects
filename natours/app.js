@@ -5,6 +5,13 @@ const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
+const mongoSnitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
+const hpp = require('hpp');
+
+
+
+
 
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
@@ -17,9 +24,22 @@ const app = express();
 app.use(helmet());
 
 // Data Sanitization against NoSQL query injection
-
+app.use(mongoSnitize());
 
 // Data Sanitization against XSS
+app.use(xss());
+
+// prevent parameter pollutiom
+app.use(hpp({
+    whitelist: [
+        'duration',
+        'ratingsQuantity',
+        'ratingsAverage',
+        'maxGroupSize',
+        'difficulty',
+        'price'
+    ]
+}))
 
 //development logging
 if (process.env.NODE_ENV === 'development') {
