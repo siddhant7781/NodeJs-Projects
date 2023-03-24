@@ -158,10 +158,20 @@ tourSchema.pre(/^find/, function (next) {
     next();
 })
 
+
+tourSchema.pre(/^find/, function (next) {
+    this.populate({
+        path: 'guides',
+        select: '-__v -passwordChangedAt'
+    });
+})
+
 tourSchema.post(/^find/, function (docs, next) {
 
     next();
 })
+
+
 
 //AGGREGATION MIDDLEWARE
 tourSchema.pre('aggregate', function (next) {
