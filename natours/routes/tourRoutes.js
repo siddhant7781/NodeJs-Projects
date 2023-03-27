@@ -8,6 +8,7 @@ const router = express.Router()
 // router.param('id', tourController.checkId)
 
 
+
 router.use('/:tourId/reviews', reviewRouter);
 
 router
@@ -16,6 +17,9 @@ router
 
 router.route('/tour-stats').get(tourController.getTourStats)
 router.route('/monthly-plan/:year').get(authController.protect, authController.restrictTo('admin', 'lead-guide', 'giudes'), tourController.getMonthlyPlan)
+
+router.route('/tours-within/:distance/center/:latlng/unit/:unit')
+    .get(tourController.getToursWithin)
 
 
 router
