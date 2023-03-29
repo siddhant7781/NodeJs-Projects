@@ -1,14 +1,26 @@
 doctype html 
 html 
     head 
-        title Natours
+        meta(charset='UTF-8')
+        meta(name="viewport",content="width=device-width, initial-scale=1.0")
         link(rel='stylesheet' href='css/style.css')
         link(rel='shortcut icon' type='image/png' href='img/favicon.png')
+        link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Lato:300,300i,700')
+        title Natours
 
     body
-        h1=tour
-        h2=user
-        p this is just some text
+
+    
+        include _header
+
+        section.overview
+            h1=tour
+
+        include _footer
+    
+
+    
+       
 
 
 
