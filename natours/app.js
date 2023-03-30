@@ -11,12 +11,10 @@ const hpp = require('hpp');
 
 
 
-
-
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
-
+const viewRouter = require('./routes/viewRoutes');
 const app = express();
 
 app.set('view engine', 'pug');
@@ -73,10 +71,23 @@ app.use((req, res, next) => {
 })
 
 //Routes
+
+app.use('/', viewRouter)
 app.get('/', (req, res) => {
     res.status(200).render('base', {
         tour: 'The Forest Hiker',
         user: 'jonas'
+    });
+})
+
+app.get('/overview', (req, res) => {
+    res.status(200).render('overview', {
+        title: 'All tours'
+    });
+})
+app.get('/tour', (req, res) => {
+    res.status(200).render('tour', {
+        title: 'The forest hiker tour'
     });
 })
 
