@@ -8,4 +8,6 @@ app.get('/overview', viewsController.getOverview);
 
 app.get('/tour', viewsController.getTour);
 
+app.get('/tour/:slug', viewsController.getTour);
+
 module.exports = router;
