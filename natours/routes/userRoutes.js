@@ -1,4 +1,5 @@
 const express = require('express');
+const multer = require('multer');
 const userController = require('./../controllers/userController')
 const authController = require('./../controllers/authController');
 const reviewController = require('./../controllers/reviewController');
@@ -12,6 +13,7 @@ router.get('/logout', authController.logout);
 router.post('/forgotpassword', authController.forgotPassword);
 router.patch('/resetpassword/:token', authController.resetPassword);
 
+
 // protect all routes after this middleware. 
 router.use(authController.protect)
 
@@ -21,9 +23,9 @@ router.get('/me',
     userController.getMe,
     userController.getUser)
 
-router.patch('/updateme', userController.deleteMe);
+router.patch('/updateme', userController.uploadUserPhoto, userController.resizeUserPhoto, userController.updateMe);
 
-router.delete('/deleteme', userController.updateMe);
+router.delete('/deleteme', userController.deleteMe);
 
 router.use(authController.restrictTo('admin'));
 router
