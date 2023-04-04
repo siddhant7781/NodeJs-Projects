@@ -20,7 +20,7 @@ const handleValidationErrorDB = err => {
 const sendErrorDev = (err, req, res) => {
     //API
     if (req.originalUrl.startsWith('/api')) {
-        return res.status(err.stausCode).json({
+        return res.status(err.statusCode).json({
             status: err.status,
             error: err,
             message: err.message,
@@ -29,7 +29,7 @@ const sendErrorDev = (err, req, res) => {
         })
     }
     //rendered website
-    return res.status(err.statusCode).rendor('error', {
+    return res.status(err.statusCode).render('error', {
         title: 'something went wrong',
         msg: err.message
     })
@@ -40,7 +40,7 @@ const sendErrorProd = (err, req, res) => {
     // operational, trusted error: send message to client
     if (req.originalUrl.startsWith('/api')) {
         if (err.isOperational) {
-            return res.status(err.stausCode).json({
+            return res.status(err.statusCode).json({
                 status: err.status,
                 message: err.message,
             })
@@ -60,7 +60,7 @@ const sendErrorProd = (err, req, res) => {
     }
     if (err.isOperational) {
         // rendered website
-        return res.status(err.stausCode).json({
+        return res.status(err.statusCode).json({
             status: err.status,
             message: err.message,
         })
@@ -91,7 +91,7 @@ const handleJWTExpiredError = err => {
 }
 
 module.exports = (err, req, res, next) => {
-    err.stausCode = err.stausCode || 500;
+    err.stausCode = err.statusCode || 500;
     err.status = err.status || 'error'
 
     if (process.env.NODE_ENV === 'development') {
